@@ -98,8 +98,8 @@
 						</tr>
 						<tr>
 							<td><code><a href="#/feature">3</a></code></td>
-							<td>Feature extraction <br/>
-								<small>How can we extract useful features from an image?</small>
+							<td>Feature detection <br/>
+								<small>How can we detect useful features from an image?</small>
 							</td>
 						</tr>
 						<tr>
@@ -157,9 +157,31 @@
 
 			<section id="examples">
 				<section>
-					<h3>Examples</h3>
-					<p>Give some useful neuroimaging examples... denoising/detrending, segmentation, registration, 3D model estimation, maybe Ariel's U network</p>
+					<h3>Image processing in medical image analysis</h3>
+					<p>Color deconvolution for immunohistochemical staining</p>
+					<img src="img/ex-staining.png" style="width: 50%">
 				</section>
+
+				<section>
+					<h3>Image registration</h3>
+					<p>Find the coordinate transform between two independent images</p>
+					<img src="img/ex-registration.jpg" style="width: 50%">
+				</section>
+
+				<section>
+					<h3>3D reconstruction</h3>
+					<p>Reconstruct 3D white matter tracts from diffusion tensor imaging (DTI)</p>
+					<img src="img/ex-dti.jpg" style="width: 50%">
+				</section>
+
+				<section>
+					<h3>Intraretinal fluid segmenter</h3>
+					<p>Deep learning based segmentation of edema for optical coherence tomography (OCT) images of the retina</p>
+					<img src="img/ex-oct-edema.png" style="width: 60%">
+					<small><a href="https://github.com/uw-biomedical-ml/irf-segmenter">github.com/uw-biomedical-ml/irf-segmenter</a></small>
+				</section>
+
+
 				<section data-background-iframe="https://roygbiv.mindboggle.info/roygbiv/web/index.html" data-background-interactive>
 				</section>
 			</section>
@@ -314,7 +336,9 @@ io.imsave("noise.jpg", img)
 					<h3>Tutorial 1: Image manipulation</h3>
 
 					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/1-skimage_intro.ipynb">/tutorials/1-skimage_intro.ipynb</a></p>
-					<small>(adapted from <a href="https://github.com/scikit-image/skimage-tutorials/blob/master/lectures/00_images_are_arrays.ipynb">/skimage-tutorials/lectures/00_images_are_arrays.ipynb</a>)</small>
+					<p><pre><code>$ git clone https://github.com/mbeyeler/2018-neurohack-skimage.git</code></pre></p>
+
+					<small style="margin-top: 20px">(adapted from <a href="https://github.com/scikit-image/skimage-tutorials/blob/master/lectures/00_images_are_arrays.ipynb">/skimage-tutorials/lectures/00_images_are_arrays.ipynb</a>)</small>
 				</section>
 			</section>
 
@@ -364,6 +388,28 @@ img_blurred = filters.gaussian_filter(img, sigma=5)
 				</section>
 
 				<section>
+					<h3>Sobel filter</h3>
+					<div style="float: right; width: 30%">
+						<img src="img/sobel-filter.jpg" style="width:100%">
+					</div>
+					<div style="float: left; width: 70%">
+						<small>
+							A <i>discrete differential operator</i> used to emphasize edges in an image.
+						</small>
+						<small class="fragment">
+							The image is convolved with a small, separable, integer-valued filter in the horizontal and vertical directions.
+						</small>
+						<img class="fragment" src="img/sobel-eqs.jpg">
+						<pre class="fragment"><code>
+from skimage import data, filters
+img = data.camera()
+img_edges = filters.sobel(img)
+						</code></pre>
+
+					</div>
+				</section>
+
+				<section>
 					<h3>Median filter</h3>
 					<div style="float: right; width: 35%">
 						<img src="img/median-filter.jpg">
@@ -409,32 +455,52 @@ img_blurred = filters.median_filter(img
 				</section>
 
 				<section>
-					<h3>Edge detection</h3>
-					<p>Sobel</p>
-					<p>Canny</p>
-				</section>
-
-				<section>
-					<h3>Corner detection</h3>
-					<p>Harris</p>
-					<p>Shi-Tomasi</p>
-				</section>
-
-				<section>
-					<h3>Blob detection</h3>
-					<p>Laplacian of Gaussian</p>
-					<p>Difference of Gaussian</p>
+					<h3>Canny edge detection</h3>
+					<div style="float: right; width: 35%">
+						<img src="img/canny.png">
+					</div>
+					<div style="float: left; width: 65%">
+						<ol>
+							<li>Apply a Gaussian filter to smooth the image and remove noise</li>
+							<li>Find the intensity gradients</li>
+							<li>Apply nonmaximum suppression to get rid of spurious responses to edge detection</li>
+							<li>Apply double threshold do termine potential edges</li>
+							<li>Track edge by <i>hysteresis</i>: finalize edge detection by suppressing weak edges</li>
+						</ol>
+					</div>
 				</section>
 
 				<section>
 					<h3>Hough transform</h3>
+					<p>used to detect <i>lines</i>, <i>circles</i> or other parametric curves</p>
+					<small>The locus of (a, b) points in <i>parameter space</i> fall on a circle with radius R centered at (x, y). The true center point will be common to all parameter circles, and can be found with a Hough accumulation array.</small>
+					<img src="img/hough.png" style="width:70%">
 				</section>
 
 				<section>
-					<h3>Feature description</h3>
-					<p>SIFT</p>
-					<p>SURF</p>
-					<p>HOG</p>
+					<h3>Haar wavelets</h3>
+					<p>sum up intensities in small rectangles, calculate the difference between the sums</p>
+					<img src="img/haar.jpg" style="width: 70%">
+				</section>
+
+				<section>
+					<h3>Many more algorithms...</h3>
+					<table>
+						<tbody>
+							<tr>
+								<td> <small><code>skimage.feature.corner_harris</code></small> </td>
+								<td> <small>Harris corner measure</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.feature.hog</code></small> </td>
+								<td> <small>Histogram of oriented gradients (HOG)</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.feature.ORB</code></small> </td>
+								<td> <small>Oriented FAST and rotated BRIEF feature detector</small> </td>
+							</tr>
+						</tbody>
+					</table>
 				</section>
 
 				<section>
