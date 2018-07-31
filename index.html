@@ -4,9 +4,9 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Neurohackademy 2018: Computer Vision</title>
+	<title>Neurohackademy 2018: Image processing with scikit-image</title>
 
-	<meta name="description" content="A tutorial on image processing and computer vision for neuroimaging applications">
+	<meta name="description" content="A tutorial on image processing and computer vision with scikit-image">
 	<meta name="author" content="Michael Beyeler">
 
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -64,7 +64,7 @@
 		<div class="slides">
 
 			<section  id="title">
-				<h3>Computer vision for neuroimaging <br>with scikit-image</h3>
+				<h3>Image processing and computer vision <br>with scikit-image</h3>
 				<h4>Neurohackademy 2018</h4>
 				<p>
 					<small>
@@ -108,13 +108,13 @@
 								<small>How can we segment an MRI image into different sections?</small>
 							</td>
 						</tr>
-						<tr>
+<!-- 						<tr>
 							<td><code><a href="#/registration">5</a></code></td>
 							<td>Image registration <br/>
 								<small>How do we register images of brains?</small>
 							</td>
 						</tr>
-					</tbody>
+ -->					</tbody>
 				</table>
 			</section>
 
@@ -166,7 +166,7 @@
 
 			<section id="skimage">
 				<section>
-					<h3>scikit-image</h3>
+					<img src="img/skimage-logo.png">
 
 					<p><i>scikit-image</i> is a collection of Python algorithms for image processing, developed by the SciPy community.</p>
 
@@ -174,6 +174,10 @@
 					<pre class="fragment"><code>$ conda install scikit-image</code></pre>
 
 					<p class="fragment">More info at <a href="http://scikit-image.org">http://scikit-image.org</a>.</p>
+				</section>
+
+				<section>
+					<img src="img/skimage-overview.jpg" style="width:90%">
 				</section>
 
 				<section>
@@ -236,15 +240,135 @@
 						</tbody>
 					</table>
 				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>Images are NumPy arrays</h3>
+					<div style="float: right; width: 40%">
+						<img src="img/np-image.jpg">
+					</div>
+					<div style="float: left; width: 60%">
+						<p>Pixels are array elements:</p>
+						<pre><code>
+ import numpy as np
+ image = np.ones((5, 5))
+ image[0, 0] = 0
+ image[2, :] = 0
+						</code></pre>
+
+						<small>
+							Values 0 - 255: 0 is black, 255 is white (<code>uint8</code>) <br/>
+							Values 0.0 - 1.0: 0.0 is black, 1.0 is white (<code>float64</code>)
+						</small>
+					</div>
+				</section>
 
 				<section>
-					<h3>Tutorial 1</h3>
+					<h3>Image I/O</h3>
+
+					<pre><code>
+from skimage import io
+img_rgb = io.imread(path_to_rgb_file)
+img_gray = io.imread(path_to_rgb_file, as_grey=True)
+					</code></pre>
+
+					<pre><code>
+img = np.random.rand((500, 500))
+io.imsave("noise.jpg", img)
+					</code></pre>
+
+					<small>Note: Since <i>scikit-image</i> operates on NumPy array, any image reader library that provides arrays will do (e.g., <i>imageio</i>, <i>matplotlib</i>, <i>pillow</i>).</small>
+				</section>
+
+				<section>
+					<h3>Drawing</h3>
+
+					<p>It's easy to draw on images, too.</p>
+					<table>
+						<tbody>
+							<tr>
+								<td> <small><code>skimage.draw.line</code></small> </td>
+								<td> <small>Generate line pixel coordinates</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.draw.circle</code></small> </td>
+								<td> <small>Generate coordinates of pixels within a circle</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.draw.polygon</code></small> </td>
+								<td> <small>Generate coordinates of pixels within a polygon</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.draw.random_shapes</code></small> </td>
+								<td> <small>Generate an image with random shapes, labeled with bounding boxes</small> </td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+
+
+				<section>
+					<h3>Tutorial 1: Image manipulation</h3>
 
 					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/1-skimage_intro.ipynb">/tutorials/1-skimage_intro.ipynb</a></p>
 				</section>
 			</section>
 
+			<section id="filters">
+				<section>
+					<h3>Image filters</h3>
+					<p>One of the most basic and common image operations - used to remove noise or enhance features.</p>
+					<table>
+						<tbody>
+							<tr>
+								<td> <small><code>skimage.filters.gaussian</code></small> </td>
+								<td> <small>Multi-dimensional Gaussian filter</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.filters.sobel</code></small> </td>
+								<td> <small>Find the edge magnitude using the Sobel transform</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.filters.median</code></small> </td>
+								<td> <small>Return local median of an image</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.filters.gabor</code></small> </td>
+								<td> <small>Returns real and imaginary responses to Gabor filter</small> </td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h3> Gaussian filter </h3>
+
+					<div style="float: right; width: 20%">
+						<img src="img/gaussian-blur.jpg">
+					</div>
+					<div style="float: left; width: 80%">
+						<small>Used to smooth images </small>
+						<small>Similar to mean filter, but doesn't weight all values in the neighborhood equally (pixels closer to the center are weighted more).</small>
+						<small>The standard deviation <i>sigma</i> defines the size of the neighborhood.</small>
+
+						<pre><code>
+from skimage import data, filters
+img = data.camera()
+img_blurred = filters.gaussian_filter(img, sigma=5)
+						</code></pre>
+					</div>
+				</section>
+
+				<section>
+					<h3>Sobel filter</h3>
+				</section>
+			</section>
+
 			<section id="feature">
+				<h3>Feature detection</h3>
+
 			</section>
 			
 			<section id="segmentation">
@@ -274,7 +398,15 @@
 				</section>
 			</section>
 
-			<section id="registration">
+			<section id="resources">
+				<ul>
+					<li>Official website: <a href="http://scikit-image.org">http://scikit-image.org</a></li>
+					<li>Tutorials: <a href="https://github.com/scikit-image/skimage-tutorials">https://github.com/scikit-image/skimage-tutorials</a></li>
+				</ul>
+			</section>
+
+			<section id="questions">
+				<h3>Questions?</h3>
 			</section>
 		</div>
 	</div>
