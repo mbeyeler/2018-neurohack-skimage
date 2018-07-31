@@ -310,11 +310,11 @@ io.imsave("noise.jpg", img)
 				</section>
 
 
-
 				<section>
 					<h3>Tutorial 1: Image manipulation</h3>
 
 					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/1-skimage_intro.ipynb">/tutorials/1-skimage_intro.ipynb</a></p>
+					<small>(adapted from <a href="https://github.com/scikit-image/skimage-tutorials/blob/master/lectures/00_images_are_arrays.ipynb">/skimage-tutorials/lectures/00_images_are_arrays.ipynb</a>)</small>
 				</section>
 			</section>
 
@@ -441,40 +441,87 @@ img_blurred = filters.median_filter(img
 					<h3>Tutorial 2: Feature detection</h3>
 
 					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/2-skimage_feature_detection.ipynb">/tutorials/2-skimage_feature_detection.ipynb</a></p>
+					<small>(adapted from <a href="https://github.com/scikit-image/skimage-tutorials/blob/master/lectures/2_feature_detection.ipynb">skimage-tutorials/lectures/2_feature_detection.ipynb</a>)</small>
 				</section>
 			</section>
 			
 			<section id="segmentation">
 				<section>
 					<h3>Image segmentation</h3>
+					<img src="img/terminator-vision.png" style="width:70%"/>
 					<p class="fragment"><i>Supervised</i>: some prior knowledge is used to guide the algorithm.</p>
 					<p class="fragment"><i>Unsupervised</i>: no prior knowledge given.</p>
 				</section>
 
 				<section>
-					<h3>Supervised segmentation</h3>
-					<ul>
-						<li> <pre><code>skimage.segmentation.random_walker</code></pre> </li>
-						<li> <pre><code>skimage.segmentation.active_contour</code></pre> </li>
-						<li> <pre><code>skimage.segmentation.watershed</code></pre> </li>
-					</ul>
+					<h3>Thresholding</h3>
+					<p><i>Thresholding</i> is used to create a binary image from a grayscale image.</p>
+					<p><i>Otsu's method</i> calculates an "optimal" threshold that maximizes the variance between two classes of pixels.</p>
+					<img src="img/segment-threshold.png" style="width: 80%"/>
 				</section>
 
 				<section>
-					<h3>Supervised segmentation</h3>
-					<ul>
-						<li> <pre><code>skimage.segmentation.slic</code></pre> </li>
-						<li> <pre><code>skimage.segmentation.chan_vese</code></pre> </li>
-						<li> <pre><code>skimage.segmentation.felzenszwalb</code></pre> </li>
-						<li> <pre><code>skimage.segmentation.quickshift</code></pre> </li>
-					</ul>
+					<h3>Random walker segmentation</h3>
+					<p><i>Anisotropic diffusion</i> with tracers initiated at the markers' position</p>
+					<small>Local diffusivity coefficient is greater if neighboring pixels have similar values, so that diffusion is difficult across high gradients</small>
+					<small>Markers label different phases, like below (too noisy for thresholding).</small>
+					<img src="img/segment-random-walker.png" style="width: 80%"/>
+				</section>
+
+				<section>
+					<h3>Watershed segmentation</h3>
+					<p>Starting from user-defined markers, <i>watershed</i> treats pixel values as a local topography, then floods basins from the markers.</p>
+					<small>Markers are often chosen as local minima of the image, from which basins are flooded.</small>
+					<img src="img/segment-watershed.png" style="width:80%"/>
+				</section>
+
+				<section>
+					<h3>Simple linear iterative clustering (SLIC)</h3>
+					<p>A spatially localized version of <i>k-means clustering</i>.</p>
+					<small>Pixels are represented in 5D (x, y, L, a, b) using the <i>CIELAB color space</i>.</small>
+					<small><i>k-means</i>:
+					Given a set of <i>k</i> cluster centers, assign each pixel to the nearest one. Update the new cluster centers to be the means of the pixel centroids in the cluster. Repeat until convergence.</small>
+					<img src="img/segment-slic.png" style="width:70%"/>
+				</section>
+
+				<section>
+					<h3>Many more algorithms...</h3>
+					<table>
+						<tbody>
+							<tr>
+								<td> <small><code>skimage.segmentation.quickshift</code></small> </td>
+								<td> <small>Similar to <i>SLIC</i>: hierarchical segmentation in 5D space</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.segmentation.chan_vese</code></small> </td>
+								<td> <small>Designed to segment objects without clearly defined boundaries</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.segmentation.felzenszwalb</code></small> </td>
+								<td> <small>Spanning tree based clustering</small> </td>
+							</tr>
+							<tr>
+								<td> <small><code>skimage.future.graph</code></small> </td>
+								<td> <small>Region adjacency graph (RAG) based graph cuts</small> </td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h3>Tutorial 3: Image segmentation</h3>
+
+					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/3-skimage_segmentation.ipynb">/tutorials/3-skimage_segmentation.ipynb</a></p>
+					<small>(adapted from <a href="https://github.com/scikit-image/skimage-tutorials/blob/master/lectures/4_segmentation.ipynb">skimage-tutorials/lectures/4_segmentation.ipynb</a>)</small>
 				</section>
 			</section>
 
 			<section id="resources">
+				<h3>Resources</h3>
 				<ul>
 					<li>Official website: <a href="http://scikit-image.org">http://scikit-image.org</a></li>
 					<li>Tutorials: <a href="https://github.com/scikit-image/skimage-tutorials">https://github.com/scikit-image/skimage-tutorials</a></li>
+					<li>Alternative to <i>scikit-image</i>: <a href="http://opencv.org">OpenCV</a></li>
 				</ul>
 			</section>
 
