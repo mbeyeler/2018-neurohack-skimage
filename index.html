@@ -245,7 +245,7 @@
 			<section>
 				<section>
 					<h3>Images are NumPy arrays</h3>
-					<div style="float: right; width: 40%">
+					<div class="fragment" style="float: right; width: 40%">
 						<img src="img/np-image.jpg">
 					</div>
 					<div style="float: left; width: 60%">
@@ -257,7 +257,7 @@
  image[2, :] = 0
 						</code></pre>
 
-						<small>
+						<small class="fragment">
 							Values 0 - 255: 0 is black, 255 is white (<code>uint8</code>) <br/>
 							Values 0.0 - 1.0: 0.0 is black, 1.0 is white (<code>float64</code>)
 						</small>
@@ -273,12 +273,14 @@ img_rgb = io.imread(path_to_rgb_file)
 img_gray = io.imread(path_to_rgb_file, as_grey=True)
 					</code></pre>
 
-					<pre><code>
+					<pre class="fragment"><code>
 img = np.random.rand((500, 500))
 io.imsave("noise.jpg", img)
 					</code></pre>
 
-					<small>Note: Since <i>scikit-image</i> operates on NumPy array, any image reader library that provides arrays will do (e.g., <i>imageio</i>, <i>matplotlib</i>, <i>pillow</i>).</small>
+					<small class="fragment">
+						Note: Since <i>scikit-image</i> operates on NumPy array, any image reader library that provides arrays will do (e.g., <i>imageio</i>, <i>matplotlib</i>, <i>pillow</i>).
+					</small>
 				</section>
 
 				<section>
@@ -362,13 +364,84 @@ img_blurred = filters.gaussian_filter(img, sigma=5)
 				</section>
 
 				<section>
-					<h3>Sobel filter</h3>
+					<h3>Median filter</h3>
+					<div style="float: right; width: 35%">
+						<img src="img/median-filter.jpg">
+					</div>
+					<div style="float: left; width: 65%">
+						<small>
+							A <i>nonlinear</i> digital filtering technique often used to remove noise from an image
+						</small>
+						<pre><code>
+from skimage import io, filters, morphology
+img = io.imread("teddy.jpg")
+img_blurred = filters.median_filter(img
+		  selem=morphology.disk(3)
+	      )
+						</code></pre>
+
+						<small>(can also be used to generate a fun <a href="http://www.askaswiss.com/2016/01/how-to-create-cartoon-effect-opencv-python.html">cartoon effect</a>)</small>
+					</div>
 				</section>
 			</section>
 
 			<section id="feature">
-				<h3>Feature detection</h3>
+				<section>
+					<h3>Feature detection</h3>
+					<p>Methods for computing <i>abstractions</i> of image information</p>
+					<table>
+						<tbody>
+							<tr>
+								<td> <small>Edges</small> </td>
+								<td> <small>points where there is a boundary between two image regions</small> </td>
+							</tr>
+							<tr>
+								<td> <small>Corners</small> </td>
+								<td> <small>point-like features with 2D structure</small> </td>
+							</tr>
+							<tr>
+								<td> <small>Blobs</small> </td>
+								<td> <small>regions of interest</small> </td>
+							</tr>
+						</tbody>
+					</table>
+					<small>At every point of an image, ask: is a feature of a given type present or not?</small>
+				</section>
 
+				<section>
+					<h3>Edge detection</h3>
+					<p>Sobel</p>
+					<p>Canny</p>
+				</section>
+
+				<section>
+					<h3>Corner detection</h3>
+					<p>Harris</p>
+					<p>Shi-Tomasi</p>
+				</section>
+
+				<section>
+					<h3>Blob detection</h3>
+					<p>Laplacian of Gaussian</p>
+					<p>Difference of Gaussian</p>
+				</section>
+
+				<section>
+					<h3>Hough transform</h3>
+				</section>
+
+				<section>
+					<h3>Feature description</h3>
+					<p>SIFT</p>
+					<p>SURF</p>
+					<p>HOG</p>
+				</section>
+
+				<section>
+					<h3>Tutorial 2: Feature detection</h3>
+
+					<p><a href="https://github.com/mbeyeler/2018-neurohack-skimage/blob/master/tutorials/2-skimage_feature_detection.ipynb">/tutorials/2-skimage_feature_detection.ipynb</a></p>
+				</section>
 			</section>
 			
 			<section id="segmentation">
