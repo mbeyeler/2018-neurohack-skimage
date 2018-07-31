@@ -64,7 +64,7 @@
 		<div class="slides">
 
 			<section  id="title">
-				<h3>Computer vision for neuroimaging</h3>
+				<h3>Computer vision for neuroimaging <br>with scikit-image</h3>
 				<h4>Neurohackademy 2018</h4>
 				<p>
 					<small>
@@ -75,78 +75,179 @@
 					</small>
 				</p>
 				<p>
-					<large><a href="http://mbeyeler.github.io/2018-neurohack-cv">mbeyeler.github.io/2018-neurohack-cv</a></large>
+					<large>
+						<a href="http://mbeyeler.github.io/2018-neurohack-skimage">mbeyeler.github.io/2018-neurohack-skimage</a>
+					</large>
 				</p>
 			</section>
 
-			<section id="what">
-				<h3>What is computer vision?</h3>
-				<p class="fragment">An interdisciplinary field that deals with gaining high-level understanding from digital images or videos.</p>
-				<p class="fragment">Computer vision tasks include methods for <i>acquiring</i>, <i>processing</i>, and <i>analyzing</i> digital images.</p>
-			</section>
-
-			<section id="cv-vs-ip">
-				<h3> Computer vision vs image processing</h3>
-				<div style="float:right; width:40%">
-					<img src="cv-vs-ip.jpg" style="width:100%"/>
-				</div>
-				<div style="float:left; width:60%">
-					<ul style="float:left; vertical-align: center">
-						<li class="fragment">Image processing:
-							<ul>
-								<li> <i>[IMG IN] &rArr; [IMG OUT]</i></li>
-								<li> filtering, denoising, etc.</li>
-							</ul>
-						</li>
-						<li class="fragment">Computer vision:
-							<ul>
-								<li> <i>[IMG IN] &rArr; [DESC OUT]</i></li>
-								<li> feature extraction, segmentation, recognition, etc.</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</section>
-
-			<section id="ex-registration">
-				<h3>Example: Registration</h3>
-			</section>
-
-			<section id="ex-segmentation">
-				<h3>Example: Segmentation</h3>
-			</section>
-
-			<section data-background-iframe="https://roygbiv.mindboggle.info/roygbiv/web/index.html" data-background-interactive>
-			</section>
-
-			<section id="ex-reconstruction">
-				<h3>Example: 3D reconstruction</h3>
-			</section>
-
-			<section id="image-data">
-				<h3>What is image data?</h3>
-
-				<p class="fragment">For our purposes: multi-dimensional homogeneous data in which <i>spatial relationships</i> matter</p>
-				<p class="fragment">- spatial contiguity is meaningful</p>
-				<p class="fragment">- usually 3D images or 2D projections</p>
-			</section>
-
-			<section id="today">
+			<section id="agenda">
 				<h3>Today's Agenda</h3>
 
-				<ul>
-					<li>Introduction to scikit-image
-					</li>
-				</ul>
+				<table>
+					<tbody>
+						<tr>
+							<td><code><a href="#/intro">1</a></code></td>
+							<td>Introduction</td>
+						</tr>
+						<tr>
+							<td><code><a href="#/skimage">2</a></code></td>
+							<td>The <i>scikit-image</i> toolkit <br/>
+								<small>How are images represented in scientific computing?</small>
+							</td>
+						</tr>
+						<tr>
+							<td><code><a href="#/feature">3</a></code></td>
+							<td>Feature extraction <br/>
+								<small>How can we extract useful features from an image?</small>
+							</td>
+						</tr>
+						<tr>
+							<td><code><a href="#/segmentation">4</a></code></td>
+							<td>Image segmentation <br/>
+								<small>How can we segment an MRI image into different sections?</small>
+							</td>
+						</tr>
+						<tr>
+							<td><code><a href="#/registration">5</a></code></td>
+							<td>Image registration <br/>
+								<small>How do we register images of brains?</small>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</section>
 
-			<section>
-				<h3>Installing scikit-image</h3>
+			<section id="intro">
+				<section>
+					<h3>What is computer vision?</h3>
+					<p class="fragment">An interdisciplinary field that deals with gaining high-level understanding from digital images or videos.</p>
+					<p class="fragment">Computer vision tasks include methods for <i>acquiring</i>, <i>processing</i>, and <i>analyzing</i> digital images.</p>
+				</section>
+				<section>
+					<h3> Image processing vs Computer vision</h3>
+					<div style="float:right; width:40%">
+						<img src="img/cv-vs-ip.jpg" style="width:100%"/>
+					</div>
+					<div style="float:left; width:60%">
+						<ul style="float:left; vertical-align: center">
+							<li>Image processing:
+								<ul>
+									<li> <i>[IMG IN] &rArr; [IMG OUT]</i></li>
+									<li> filtering, denoising, etc.</li>
+								</ul>
+							</li>
+							<li class="fragment">Computer vision:
+								<ul>
+									<li> <i>[IMG IN] &rArr; [DESC OUT]</i></li>
+									<li> feature extraction, segmentation, recognition, etc.</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<h3>What is image data?</h3>
 
-				<pre><code>$ conda install scikit-image</code></pre>
+					<p class="fragment">For our purposes: multi-dimensional homogeneous data in which <i>spatial relationships</i> matter</p>
+					<p class="fragment">- spatial contiguity is meaningful</p>
+					<p class="fragment">- usually 3D images or 2D projections</p>
+				</section>				
 			</section>
 
-			<section>
+			<section id="examples">
+				<section>
+					<h3>Examples</h3>
+					<p>Give some useful neuroimaging examples... denoising/detrending, segmentation, registration, 3D model estimation</p>
+				</section>
+				<section data-background-iframe="https://roygbiv.mindboggle.info/roygbiv/web/index.html" data-background-interactive>
+				</section>
+			</section>
+
+			<section id="skimage">
+				<section>
+					<h3>scikit-image</h3>
+
+					<p><i>scikit-image</i> is a collection of Python algorithms for image processing, developed by the SciPy community.</p>
+
+					<p class="fragment">Installation via conda:</p>
+					<pre class="fragment"><code>$ conda install scikit-image</code></pre>
+
+					<p class="fragment">More info at <a href="http://scikit-image.org">http://scikit-image.org</a>.</p>
+				</section>
+
+				<section>
+					<h3>API reference</h3>
+					<p>The main package of <code>skimage</code> only provides some utility functions - everything else is in submodules:</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Submodule</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>data</code></td>
+								<td>test images and example data</td>
+							</tr>
+							<tr>
+								<td><code>io</code></td>
+								<td>reading, saving, displaying images and videos</td>
+							</tr>
+							<tr>
+								<td><code>color</code></td>
+								<td>color space conversion</td>
+							</tr>
+							<tr>
+								<td><code>filters</code></td>
+								<td>sharpening, edge finding, rank filters, thresholding</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h3>API reference</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>Submodule</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>measure</code></td>
+								<td>measuring image properties (e.g., similarity, contours)</td>
+							</tr>
+							<tr>
+								<td><code>feature</code></td>
+								<td>feature detection and extraction</td>
+							</tr>
+							<tr>
+								<td><code>restoration</code></td>
+								<td>restoration algorithms (e.g., deconvolution denoising)</td>
+							</tr>
+							<tr>
+								<td><code>segmentation</code></td>
+								<td>partitioning an image into multiple regions</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h3>Tutorial 1</h3>
+
+					<p>scikit-image basics</p>
+				</section>
+			</section>
+
+			<section id="feature">
+			</section>
+			
+			<section id="segmentation">
 				<section>
 					<h3>Image segmentation</h3>
 					<p class="fragment"><i>Supervised</i>: some prior knowledge is used to guide the algorithm.</p>
@@ -173,6 +274,8 @@
 				</section>
 			</section>
 
+			<section id="registration">
+			</section>
 		</div>
 	</div>
 
